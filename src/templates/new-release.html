@@ -1,0 +1,27 @@
+<script type="text/template"
+        route="^album\/(.*)"
+        source="$endpoint/catalog/browse?albumId=$1"
+        transform="transformReleasePage"
+        completed="completedReleasePage">
+    {{#loading}}
+    {{>loading-view-black}}
+    {{/loading}}
+    {{#error}}
+        {{>error}}
+    {{/error}}
+    {{#data}}
+        {{#release}}
+            <div class="release-page">
+                <div class="release-bg">
+                    <img src="{{coverImage}}" />
+                </div>
+                <div class="container">
+                    {{>release-art}}
+                    {{>release-info}}
+                    {{>release-links}}
+                    {{>releast-tracks}}
+                </div>
+            </div>
+        {{/release}}
+    {{/data}}
+</script>

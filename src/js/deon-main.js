@@ -906,8 +906,7 @@ function scrollToAnimated (el, opts) {
   opts = opts || {}
   var duration = opts.duration || 1000
   var padding = opts.padding || -20
-  var top = el.getBoundingClientRect().top
-  animatedScrollTo(document.body, top + padding, duration)
+  EPPZScrollTo.scrollTo(el, padding, duration)
 }
 
 function scrollToEl (el, opts) {

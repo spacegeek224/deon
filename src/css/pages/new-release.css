@@ -1,0 +1,37 @@
+.release-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.release-page > .container {
+  z-index: 1;
+  position: relative;
+}
+
+.release-page .release-bg {
+  position: absolute;
+  top: -95%;
+  left: -95%;
+  width: 290%;
+  height: 290%;
+  background: center center fixed;
+  background-size: cover;
+  z-index: 0;
+  text-align: center;
+}
+
+.release-bg img {
+  min-width: 55%;
+  min-height: 55%;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  margin: auto;
+  filter: blur(30px);
+}
+
+.release-info {
+  padding: 40px 0;
+}
