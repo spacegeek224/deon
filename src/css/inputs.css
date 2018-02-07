@@ -36,6 +36,10 @@ table.form select{
   width: 220px;
 }
 
+select.add-to-playlist {
+  max-width: 130px;
+}
+
 table.form select.birthday-month,
 table.form select.birthday-day,
 select.birthday-month,

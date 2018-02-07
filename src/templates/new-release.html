@@ -12,24 +12,20 @@
     {{#data}}
         {{#release}}
             <div class="release-page">
-                <div class="release-bg">
-                    <img src="{{coverImage}}" />
+                <div class="release-bg" style="background-image: url('{{coverImage}}')">
                 </div>
                 <div class="container">
-                    <div class="flex sign-split">
-                        <div class="panel col-md-6">
-                            {{>release-art-play}}
-                        </div>
-                        <div class="panel col-md-6">
+                    <div class="release-cols">
+                        <div class="col-2">
                             {{>release-info}}
+                            {{>release-tracks}}
+                            {{>release-artists}}
                         </div>
-                    </div>
-                    <div class="flex sign-split">
-                        <div class="panel col-md-6">
+                        <div class="col-1">
+                            <div class="release-summary">
+                                {{>release-art-play}}
+                            </div>
                             {{>release-links}}
-                        </div>
-                        <div class="panel col-md-6">
-                            {{>releast-tracks}}
                         </div>
                     </div>
                 </div>
@@ -40,26 +36,115 @@
 
 <script type="text/template"
         mustache-name="release-art-play">
-<a action="playSong" class="release-art-play">
+<div class="release-art-play aspect-container aspect-container-1x1">
     <img src="{{coverImage}}" class="cover" />
-    <div class="icon">
-        <i class="fa fa-play"></i>
-    </div>
-</a>
+    <button class="button--release-cta button--cta"
+            action="playSongs"
+            role="play-release"
+            release-id="{{_id}}">
+        <i class="fa fa-play inactive"></i> <span>Play</span>
+        <i class="fa fa-pause active"></i> <span>Pause</span>
+    </button>
+</div>
 
 </script>
 
 <script type="text/template"
         mustache-name="release-info">
-Released {{releaseDate}}
+<div class="release-info">
+    <h1>{{release.title}}</h1>
+    <h3 class="release-artists">{{renderedArtists}}</h3>
+    <div class="release-date">{{>albumReleaseDates}}</div>
+</div>
 </script>
 
 <script type="text/template"
         mustache-name="release-links">
-<a href="#">BUY ON WHATEVER</a> <a href="#">BUY ON WHATEVER</a> <a href="#">BUY ON WHATEVER</a>
+<div class="release-links">
+    <a class="button button--cta purchase-link" href="{{../downloadUrl}}">
+        <span class="fa fa-download"></span>
+        <span>Download with Gold</span>
+    </a>
+
+    {{#purchaseLinks}}
+    <a class="button button--cta purchase-link" href="{{original}}">
+        <span class="fa fa-{{icon}}"></span>
+        <span>{{label}}</span>
+        <span class="cta">{{cta}}</span>
+    </a>
+    {{/purchaseLinks}}
+</div>
 </script>
 
 <script type="text/template"
         mustache-name="release-tracks">
-Release has {{tracks.length}} tracks
+{{#hasManyTracks}}
+<div class="release-tracks">
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink">#</th>
+                <th class="shrink nohpad"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th class="col-xs-hidden col-md-visible">Time</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#tracks}}
+            <tr dblc-action="playSongDblC">
+                <td class="shrink">{{trackNumber}}.</td>
+                <td class="shrink nohpad">
+                  {{>playSong}}
+                </td>
+                <td class="longer-width">
+                  <div class="scroll-container"
+                       onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+                    <span class="scroll-title artists">{{title}}</span>
+                  </div>
+                  {{>unlicensable}}
+                </td>
+                <td class="longer-width artists">
+                    <div class="scroll-container"
+                       onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+                    <span class="scroll-title">
+                      {{>track-artists}}
+                    </span>
+                  </div>
+                </td>
+                <td class="col-xs-hidden col-md-visible">{{time}}</td>
+                <td class="push-right">
+                    {{>trackButtons}}
+                </td>
+            </tr>
+            {{/tracks}}
+        </tbody>
+    </table>
+</div>
+{{/hasManyTracks}}
+{{^hasManyTracks}}
+{{/hasManyTracks}}
 </script>
+
+<script type="text/template"
+        mustache-name="release-artists">
+{{#releaseArtists}}
+    <div class="release-artist">
+        <a class="artist-image" href="{{artistPageUrl}}" style="background-image: url('{{profileImageUrl}}')">
+        </a>
+        <div class="artist-info">
+            <h3><a href="{{artistPageUrl}}">{{name}}</a></h3>
+            {{#aboutMD}}
+            <div class="about">{{{aboutMD}}}</div>
+            {{/aboutMD}}
+            <div class="socials">
+                {{#socials}}
+                <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i> {{cta}}</a>
+                {{/socials}}
+            </div>
+        </div>
+    </div>
+{{/releaseArtists}}
+</script>
+

@@ -7,6 +7,29 @@ var pageTitleGlue   = ' - '
 var lstore          = window.localStorage
 var sixPackSession  = null
 
+var SOCIAL_LINKS_MAP = {
+  facebook: {
+    icon: 'facebook',
+    cta: 'Like on Facebook'
+  },
+  twitter: {
+    icon: 'twitter',
+    cta: 'Follow on Twitter'
+  },
+  instagram: {
+    icon: 'instagram',
+    cta: 'Follow on Instagram'
+  },
+  youtube: {
+    icon: 'youtube-play',
+    cta: 'Subscribe on YouTube'
+  },
+  soundcloud: {
+    icon: 'soundcloud',
+    cta: 'Follow on SoundCloud'
+  }
+}
+
 preLoadImage('/img/artwork.jpg')
 preLoadImage('/img/artwork-merch.jpg')
 preLoadImage('/img/artist.jpg')
@@ -492,6 +515,7 @@ function mapTrackArtists (track) {
     details.uri = details.vanityUri || details.websiteDetailsId || details._id;
     details.public = !!details.public
     details.artistPageUrl = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/artist/' + details.uri
+    details.aboutMD = marked(details.about || "")
     return details;
   });
 
@@ -508,26 +532,29 @@ function mapTrackArtists (track) {
   return artists
 }
 
-function getSocials (urls) {
-  var socials = {
-    twitter: /twitter\.com/,
-    facebook: /facebook\.com/,
-    soundcloud: /soundcloud\.com/,
-    "youtube-play": /youtube\.com/
-  }
+function getSocials (linkObjs) {
   var arr = []
-  urls.forEach(function (link) {
-    var url = link.original
-    for (var tag in socials) {
-      if (socials[tag].test(url)) {
-        arr.push({
-          link: url,
-          icon: tag
-        })
+  return linkObjs.map(function (link) {
+    var social = {
+      link: link.original
+    }
+
+    var platform = SOCIAL_LINKS_MAP[link.platform]
+    if (platform) {
+      social = Object.assign(social, platform);
+
+      if (link.platform == 'website') {
+        link.cta = link.original
       }
     }
+
+    if (!social.icon) {
+      social.icon = 'link';
+      social.cta = link.original
+    }
+
+    return social;
   })
-  return arr
 }
 
 function getSocialsAtlas (urls) {
@@ -551,19 +578,13 @@ function getReleaseShareLink (urls) {
 }
 
 function getReleasePurchaseLinks (urls) {
-  var storemap = {
-    'Buy from Bandcamp': /bandcamp\.com/,
-    'Download On iTunes': /apple\.com/,
-    'Get From Beatport': /beatport\.com/,
-    'Get on Google Play': /play\.google\.com/
-  }
-  var links = urls.reduce(function (v, url) {
-    for (var key in storemap) {
-      if (storemap[key].test(url)) {
-        v.push({name: key, url: url})
-      }
+  var links = urls.reduce(function (links, linkObj) {
+    var extra = RELEASE_LINK_MAP[linkObj.platform]
+    if(extra) {
+      var link = Object.assign(linkObj, extra)
+      links.push(link)
     }
-    return v
+    return links
   }, [])
   return links
 }
@@ -629,6 +650,7 @@ function mapTrack (track) {
   track.bpm               = Math.round(track.bpm)
   track.licensable        = track.licensable === false ? false : true
   track.showDownloadLink  = (track.downloadable && track.streamable) || track.freeDownloadForUsers
+  console.log('track.showDownloadLink', track.showDownloadLink);
   track.time              = formatDuration(track.duration)
   track.artistsList       = mapTrackArtists(track);
   track.releaseDate       = formatDateJSON(track.release.releaseDate)
@@ -657,7 +679,7 @@ function mapRelease (release) {
   release.cover = release.coverUrl + '?image_width=512';
   release.coverBig = release.coverUrl + '?image_width=1024';
   if (release.urls instanceof Array) {
-    release.urls = release.urls.reduce(function (urls, link) {
+    release.originalUrls = release.urls.reduce(function (urls, link) {
       if (typeof(link) == 'string') {
         urls.push(link)
       }
@@ -680,23 +702,23 @@ function mapRelease (release) {
   return release
 }
 
-function transformWebsiteDetails (o) {
-  if (o.profileImageUrl) {
-    o.image = o.profileImageUrl
-    o.imageSmall = o.profileImageUrl + "?image_width=256"
+function transformWebsiteDetails (wd) {
+  if (wd.profileImageUrl) {
+    wd.image = wd.profileImageUrl
+    wd.imageSmall = wd.profileImageUrl + "?image_width=256"
   }
-  if (isNaN(o.imagePositionY))
-    o.imagePositionY = 60
-  if (o.bookings || o.managementDetail) {
-    o.contact = {
-      booking: marked(o.bookings),
-      management: marked(o.managementDetail)
+  if (isNaN(wd.imagePositionY))
+    wd.imagePositionY = 60
+  if (wd.bookings || wd.managementDetail) {
+    wd.contact = {
+      booking: marked(wd.bookings),
+      management: marked(wd.managementDetail)
     }
   }
-  if (o.urls) {
-    o.socials = getSocials(o.urls)
+  if (wd.urls) {
+    wd.socials = getSocials(wd.urls)
   }
-  return o
+  return wd
 }
 
 /* Transform Methods */
