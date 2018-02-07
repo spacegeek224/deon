@@ -1,6 +1,6 @@
 <script type="text/template"
         route="^album\/(.*)"
-        source="$endpoint/catalog/browse?albumId=$1"
+        source="$endpoint/catalog/release/$1"
         transform="transformReleasePage"
         completed="completedReleasePage">
     {{#loading}}
@@ -16,12 +16,50 @@
                     <img src="{{coverImage}}" />
                 </div>
                 <div class="container">
-                    {{>release-art}}
-                    {{>release-info}}
-                    {{>release-links}}
-                    {{>releast-tracks}}
+                    <div class="flex sign-split">
+                        <div class="panel col-md-6">
+                            {{>release-art-play}}
+                        </div>
+                        <div class="panel col-md-6">
+                            {{>release-info}}
+                        </div>
+                    </div>
+                    <div class="flex sign-split">
+                        <div class="panel col-md-6">
+                            {{>release-links}}
+                        </div>
+                        <div class="panel col-md-6">
+                            {{>releast-tracks}}
+                        </div>
+                    </div>
                 </div>
             </div>
         {{/release}}
     {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="release-art-play">
+<a action="playSong" class="release-art-play">
+    <img src="{{coverImage}}" class="cover" />
+    <div class="icon">
+        <i class="fa fa-play"></i>
+    </div>
+</a>
+
+</script>
+
+<script type="text/template"
+        mustache-name="release-info">
+Released {{releaseDate}}
+</script>
+
+<script type="text/template"
+        mustache-name="release-links">
+<a href="#">BUY ON WHATEVER</a> <a href="#">BUY ON WHATEVER</a> <a href="#">BUY ON WHATEVER</a>
+</script>
+
+<script type="text/template"
+        mustache-name="release-tracks">
+Release has {{tracks.length}} tracks
 </script>

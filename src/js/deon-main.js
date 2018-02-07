@@ -993,12 +993,12 @@ function transformReleaseTracks (obj, done) {
 
 // TODO Refactor
 function transformTracks (obj, done) {
-  obj.results.map(function (track, index, arr) {
+  var tracks = obj.results.map(function (track, index, arr) {
     mapTrack(track)
     track.index = index
     return track
   })
-  done(null, obj)
+  done(null, tracks)
 }
 
 function appendSongMetaData (tracks) {
