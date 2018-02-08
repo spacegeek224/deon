@@ -1,3 +1,4 @@
+//Links from higher priority platforms will appear higher on the page
 var RELEASE_LINK_MAP = {
   spotify: {
     label: 'Listen on Spotify',
@@ -41,11 +42,11 @@ var RELEASE_LINK_MAP = {
   }
 }
 
-function getTracksArtists (tracks) {
+function getAllTracksWebsiteArtists (tracks) {
   var artists = [];
   var artistIds = [];
   tracks.forEach(function (track) {
-    track.artistsList.forEach(function (artist) {
+    track.artistDetails.forEach(function (artist) {
       if (artistIds.indexOf(artist._id) == -1) {
         artists.push(transformWebsiteDetails(artist));
         artistIds.push(artist._id);
@@ -54,6 +55,12 @@ function getTracksArtists (tracks) {
   })
 
   return artists;
+}
+
+function transformReleaseMerch (obj) {
+  shuffle(obj.products)
+  obj.products = obj.products.slice(0,8)
+  return obj
 }
 
 function transformReleasePage (obj, done) {
@@ -75,10 +82,18 @@ function transformReleasePage (obj, done) {
       if(err) {
         return done(err);
       }
-      scope.releaseArtists = getTracksArtists(tracks);
+      scope.releaseArtists = getAllTracksWebsiteArtists(tracks);
+      scope.numArtistBeakpoints = [];
       scope.coverImage = (scope.release.cover);
       scope.tracks = tracks;
       scope.hasManyTracks = scope.tracks.length > 1
+      scope.showMerch = true;
+      for(var i = 0; i <= scope.releaseArtists.length; i++) {
+        scope.numArtistBeakpoints.push('gte-' + (i + 1))
+      }
+      if(scope.releaseArtists.length >= 6) {
+        scope.showMerch = false;
+      }
       return done(null, scope);
     });
   });
@@ -96,11 +111,11 @@ function completedReleasePage () {
       samesame = 0;
     }
 
-    if (samesame == 10) {
-      EPPZScrollTo.scrollTo(document.querySelector('.release-page'), 0, 1500);
+    if (samesame == 100) {
+      EPPZScrollTo.scrollTo(document.querySelector('.release-page'), 0, 500);
     }
     else {
-      setTimeout(checkHeight, 25);
+      setTimeout(checkHeight, 10);
     }
 
     prevHeight = currentHeight;

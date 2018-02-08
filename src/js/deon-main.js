@@ -562,15 +562,19 @@ function getSocials (linkObjs) {
         social.cta = link.original
       }
       else if (link.platform == 'twitter') {
-        social.name = getTwitterLinkUsername(link.original)
-        console.log('link.name', link.name);
+        social.label = getTwitterLinkUsername(link.original)
       }
     }
 
     if (!social.icon) {
       social.icon = 'link';
       social.cta = link.original
-      social.name = link.original;
+      social.label = link.original;
+      social.name = 'Website'
+    }
+
+    if (!social.label) {
+      social.label = social.name
     }
 
     return social;
@@ -605,7 +609,13 @@ function getReleasePurchaseLinks (urls) {
       links.push(link)
     }
     return links
-  }, [])
+  }, []).sort(function (a, b) {
+    if (a.priority == b.priority) {
+      return 0
+    }
+
+    return a.priority > b.priority ? -1 : 1;
+  })
   return links
 }
 
@@ -739,6 +749,9 @@ function transformWebsiteDetails (wd) {
   }
   if (wd.urls) {
     wd.socials = getSocials(wd.urls)
+    Object.keys(wd.socials).forEach(function (key) {
+      wd.socials[key].artistName = wd.name
+    })
   }
   return wd
 }

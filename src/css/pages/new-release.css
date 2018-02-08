@@ -8,6 +8,7 @@
 .release-page > .container {
   z-index: 1;
   position: relative;
+  max-width: 1000px;
 }
 
 .release-page .release-bg {
@@ -32,7 +33,7 @@
 .release-info {
   padding: 40px 0;
   background: #fff;
-  margin: 0 0 5px 0;
+  margin: 1em 0 5px 0;
   padding: 1em;
 }
 
@@ -139,18 +140,60 @@
   display: block;
 }
 
-.release-artists.num-artists-2 {
+.release-artists .release-artist-break,
+.release-artists.num-artists-gte-4.num-artists-gte-9 .release-artist-break:nth-child(4n),
+.release-artists.num-artists-gte-4.num-artists-gte-9.num-artists-gte-13 .release-artist-break:nth-child(6n+1) {
+  display: none;
+}
+
+
+.release-artists.num-artists-gte-4 {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
 
-.release-artists.num-artists-2 .release-artist {
-  width: 50%;
+.release-artists.num-artists-gte-4 .release-artist {
+  width: 49.5%;
+  margin-bottom: 1%;
 }
 
-.release-artists.num-artists-2 .release-artist:nth-child(2n) {
-  margin-left: 5px;
+.release-artists.num-artists-gte-4 .release-artist-break:nth-child(4n) {
+  display: block;
+  height: 0;
+  width: 100%;
 }
+
+.release-artists.num-artists-gte-9 .release-artist {
+  width: 33%;
+  margin-bottom: 0.5%;
+}
+
+.release-artists.num-artists-gte-9 .release-artist .socials {
+  display: none;
+}
+
+.release-artists.num-artists-gte-9 .release-artist h3 {
+  margin-bottom: 0px;
+  font-size: 22px;
+}
+
+
+.release-artists.num-artists-gte-9 .release-artist-break:nth-child(6n+1) {
+  display: block;
+  height: 0;
+  width: 100%;
+}
+
+.release-artists.num-artists-gte-13 .release-artist {
+  width: 24.5%;
+  margin-bottom: 0.6%;
+  padding: 0.5em;
+}
+
+.release-artists.num-artists-gte-13 .release-artist-break:nth-child(13n+1) {
+}
+
 
 .release-artist {
   background: #fff;
@@ -168,13 +211,13 @@
   height: auto;
   display: block;
   background: center center no-repeat;
-  background-size: cover;
+  background-size: 100% auto;
   margin-bottom: 0.25em;
   transition: all 0.25s ease;
 }
 
 .release-artist .artist-image:hover {
-  background-position: bottom center;
+  background-size: 110% auto;
 }
 
 .release-artist .artist-info {
@@ -223,15 +266,18 @@
   margin-bottom: 5px;
 }
 
+.release-page .release-tracks .scroll-container {
+  max-width: 200px;
+}
+
 .release-cols {
   display: flex;
-  padding: 2em 0;
-  max-width: 1000px;
+  padding: 0 0 2em 0;
   margin: 0 auto;
 }
 
 .release-cols .col-1 {
-  flex: 0 0 30%;
+  flex: 0 0 40%;
   margin-right: 5px;
 }
 
@@ -242,7 +288,7 @@
 .release-merch {
   margin-bottom: 5px;
   background: #fff;
-  padding-top: 1em;
+  padding: 1em;
 }
 
 .release-merch a.button {
@@ -253,6 +299,43 @@
   width: 25%;
 }
 .release-merch .art-list--full-width.art-list li:nth-child(5),
-.release-merch .art-list--full-width.art-list li:nth-child(6) {
+.release-merch .art-list--full-width.art-list li:nth-child(6),
+.release-merch .art-list--full-width.art-list li:nth-child(7),
+.release-merch .art-list--full-width.art-list li:nth-child(8),
+.release-merch .art-list--full-width.art-list li:nth-child(9),
+.release-merch .art-list--full-width.art-list li:nth-child(10),
+.release-merch .art-list--full-width.art-list li:nth-child(11) {
   display: none;
+}
+
+.release-page.type-Podcast .col-1 {
+  flex: 0 0 30%;
+}
+
+
+.release-page.type-Album .col-1 {
+  flex: 0 0 30%;
+}
+
+@media screen and (max-width: 767px) {
+  .release-page .release-cols {
+    display: block;
+  }
+
+  .release-page h1 {
+    font-size: 22px;
+  }
+
+  .release-page h3.release-rendered-artists {
+    font-size: 18px;
+  }
+
+  .release-cols .col-1 {
+    flex: inherit;
+    margin-right: 0px;
+  }
+
+  .release-merch .art-list--full-width.art-list li {
+    width: 50%;
+  }
 }
