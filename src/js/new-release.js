@@ -94,6 +94,8 @@ function transformReleasePage (obj, done) {
       if(scope.releaseArtists.length >= 6) {
         scope.showMerch = false;
       }
+      setPageTitle(scope.release.title + ' by ' + scope.release.renderedArtists)
+      scope.hasGoldAccess = hasGoldAccess()
       return done(null, scope);
     });
   });
@@ -111,7 +113,7 @@ function completedReleasePage () {
       samesame = 0;
     }
 
-    if (samesame == 100) {
+    if (samesame == 50) {
       EPPZScrollTo.scrollTo(document.querySelector('.release-page'), 0, 500);
     }
     else {
@@ -122,4 +124,5 @@ function completedReleasePage () {
   }
 
   checkHeight();
+  startCountdownTicks();
 }

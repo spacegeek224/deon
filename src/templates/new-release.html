@@ -42,6 +42,7 @@
         mustache-name="release-art-play">
 <div class="release-art-play aspect-container aspect-container-1x1">
     <img src="{{coverImage}}" class="cover" />
+    {{#streamable}}
     <button class="button button--cta"
             action="playSongs"
             role="play-release"
@@ -49,6 +50,7 @@
         <i class="fa fa-play inactive"></i>
         <i class="fa fa-pause active"></i>
     </button>
+    {{/streamable}}
 </div>
 
 </script>
@@ -65,8 +67,10 @@
 <script type="text/template"
         mustache-name="release-links">
 <div class="release-links">
+    {{^inEarlyAccess}}
     <a  class="button button--cta purchase-link"
         click-action="Click Download Gold"
+        click-category="Release Links"
         target="_blank"
         title="Download Track"
         track-title="{{title}}"
@@ -75,6 +79,18 @@
         <span class="fa fa-download"></span>
         <span>Download with Gold</span>
     </a>
+    {{/inEarlyAccess}}
+    {{#inEarlyAccess}}
+        {{^hasGoldAccess}}
+            <a class="button button--cta purchase-link"
+                click-action="Click Get Gold"
+                click-category="Release Links"
+                href="/gold/get">
+                <span class="fa fa-chevron-right"></span>
+                Get Gold to Listen Early
+            </a>
+        {{/hasGoldAccess}}
+    {{/inEarlyAccess}}
     {{#purchaseLinks}}
     <a class="button button--cta purchase-link"
         click-action="Click Release Purchase"
