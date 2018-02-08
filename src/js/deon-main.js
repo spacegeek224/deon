@@ -197,7 +197,7 @@ function recordErrorAndAlert (err, where) {
     message: err.message,
     where: where
   })
-  window.alert(err.message)
+  toasty(new Error(err.message))
 }
 
 function recordErrorAndGo (err, where, uri) {
@@ -587,9 +587,17 @@ function removeYouTubeClaim (e, el) {
   var videoId = data.videoId
   if (videoId.indexOf('youtu')>-1){
     videoId = youTubeIdParser(videoId)
-    if (!videoId) return toasty(Error('Please make sure to enter a YouTube ID or a valid YouTube URL.'))
+    if (!videoId) {
+      return new toasty(Error('Please make sure to enter a YouTube ID or a valid YouTube URL.'))
+    }
     videoIdInput.value = videoId;
   }
+
+  var button = document.querySelector('button[action=removeYouTubeClaim]')
+  if (button.innerText == 'Submitting...') {
+    return
+  }
+  button.innerText = 'Submitting...'
 
   requestJSON({
     url: endpoint + '/self/remove-claims',
@@ -599,7 +607,10 @@ function removeYouTubeClaim (e, el) {
     },
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    button.innerText = 'Release Claims'
+    if (err) {
+      return toasty(new Error(err.message))
+    }
     toasty(strings.claimReleased)
     videoIdInput.value = ""
   })
@@ -827,7 +838,7 @@ function getUserServicesScope (done) {
 function transformServices (obj, done) {
   getUserServicesScope(function (err, opts) {
     if (err) {
-      return window.alert(err.message);
+      return toasty(new Error(err.message));
     }
     var qo = queryStringToObject(window.location.search)
 
