@@ -10,23 +10,28 @@ var sixPackSession  = null
 var SOCIAL_LINKS_MAP = {
   facebook: {
     icon: 'facebook',
-    cta: 'Like on Facebook'
+    cta: 'Like on Facebook',
+    name: 'Facebook'
   },
   twitter: {
     icon: 'twitter',
-    cta: 'Follow on Twitter'
+    cta: 'Follow on Twitter',
+    name: 'Twitter'
   },
   instagram: {
     icon: 'instagram',
-    cta: 'Follow on Instagram'
+    cta: 'Follow on Instagram',
+    name: 'Instagram'
   },
   youtube: {
     icon: 'youtube-play',
-    cta: 'Subscribe on YouTube'
+    cta: 'Subscribe on YouTube',
+    name: 'YouTube'
   },
   soundcloud: {
     icon: 'soundcloud',
-    cta: 'Follow on SoundCloud'
+    cta: 'Follow on SoundCloud',
+    name: 'SoundCloud'
   }
 }
 
@@ -419,19 +424,29 @@ function getArtistTwitterMention (artist) {
   if (artist.urls) {
     var socials = getSocialsAtlas(artist.urls);
     if (socials.twitter) {
-      var matches = socials.twitter.link.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?([^\/]+)(\/\w+)*$/);
-      var username;
-      if (matches && matches[3]) {
-        var username = matches[3]
-        if (username.substr(0, 1) != '@') {
-          username = '@' + username;
-        }
-        return username;
+      var username = getTwitterLinkUsername(socials.twitter);
+
+      if (username) {
+        return username
       }
     }
   }
 
   return artist.name
+}
+
+function getTwitterLinkUsername (url) {
+  var matches = url.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?([^\/]+)(\/\w+)*$/);
+  var username;
+  if (matches && matches[3]) {
+    var username = matches[3]
+    if (username.substr(0, 1) != '@') {
+      username = '@' + username;
+    }
+    return username;
+  }
+
+  return false
 }
 
 /* Loads the required release and track data specified by the object.
@@ -544,13 +559,18 @@ function getSocials (linkObjs) {
       social = Object.assign(social, platform);
 
       if (link.platform == 'website') {
-        link.cta = link.original
+        social.cta = link.original
+      }
+      else if (link.platform == 'twitter') {
+        social.name = getTwitterLinkUsername(link.original)
+        console.log('link.name', link.name);
       }
     }
 
     if (!social.icon) {
       social.icon = 'link';
       social.cta = link.original
+      social.name = link.original;
     }
 
     return social;
@@ -650,6 +670,8 @@ function mapTrack (track) {
   track.bpm               = Math.round(track.bpm)
   track.licensable        = track.licensable === false ? false : true
   track.showDownloadLink  = (track.downloadable && track.streamable) || track.freeDownloadForUsers
+  console.log('track.downloadable',track.downloadable);
+  console.log('track.streamable',track.streamable);
   console.log('track.showDownloadLink', track.showDownloadLink);
   track.time              = formatDuration(track.duration)
   track.artistsList       = mapTrackArtists(track);

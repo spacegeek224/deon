@@ -16,17 +16,20 @@
                 </div>
                 <div class="container">
                     <div class="release-cols">
-                        <div class="col-2">
-                            {{>release-info}}
-                            {{>release-tracks}}
-                            {{>release-artists}}
-                        </div>
                         <div class="col-1">
                             <div class="release-summary">
+                                {{>release-info}}
                                 {{>release-art-play}}
                             </div>
                             {{>release-links}}
                         </div>
+                        <div class="col-2">
+                            {{>release-tracks}}
+                            {{>release-artists}}
+                            {{>release-merch}}
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -38,12 +41,12 @@
         mustache-name="release-art-play">
 <div class="release-art-play aspect-container aspect-container-1x1">
     <img src="{{coverImage}}" class="cover" />
-    <button class="button--release-cta button--cta"
+    <button class="button button--cta"
             action="playSongs"
             role="play-release"
             release-id="{{_id}}">
-        <i class="fa fa-play inactive"></i> <span>Play</span>
-        <i class="fa fa-pause active"></i> <span>Pause</span>
+        <i class="fa fa-play inactive"></i>
+        <i class="fa fa-pause active"></i>
     </button>
 </div>
 
@@ -61,7 +64,7 @@
 <script type="text/template"
         mustache-name="release-links">
 <div class="release-links">
-    <a class="button button--cta purchase-link" href="{{../downloadUrl}}">
+    <a class="button button--cta purchase-link" click-action="" href="{{../downloadUrl}}">
         <span class="fa fa-download"></span>
         <span>Download with Gold</span>
     </a>
@@ -124,14 +127,21 @@
 </div>
 {{/hasManyTracks}}
 {{^hasManyTracks}}
+<div style="display: none;">
+    {{#tracks}}
+        {{>playSong}}
+    {{/tracks}}
+</div>
+
 {{/hasManyTracks}}
 </script>
 
 <script type="text/template"
         mustache-name="release-artists">
+<div class="release-artists num-artists-{{releaseArtists.length}}">
 {{#releaseArtists}}
     <div class="release-artist">
-        <a class="artist-image" href="{{artistPageUrl}}" style="background-image: url('{{profileImageUrl}}')">
+        <a class="artist-image aspect-container aspect-container-16x9" href="{{artistPageUrl}}" style="background-image: url('{{profileImageUrl}}')">
         </a>
         <div class="artist-info">
             <h3><a href="{{artistPageUrl}}">{{name}}</a></h3>
@@ -140,11 +150,57 @@
             {{/aboutMD}}
             <div class="socials">
                 {{#socials}}
-                <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i> {{cta}}</a>
+                <a href="{{link}}" click-action="Click Artist {{name}}" click-label="{{../name}} {{name}}" click-category="Artist Social" target="_blank"><i class="fa fa-{{icon}}"></i> {{name}}</a>
                 {{/socials}}
             </div>
         </div>
     </div>
 {{/releaseArtists}}
+</div>
+</script>
+
+<script type="text/template"
+        mustache-name="release-merch">
+    <div source="https://shop.monstercat.com/collections/website-featured/products.json" template="release-merch"></div>
+</script>
+
+<script type="text/template"
+        template-name="release-merch"
+        transform="transformMerch">
+<div class="release-merch">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    {{/error}}
+    {{#data}}
+    <div class="container latest">
+        <header class="flex top-cta">
+            <div class="col-xs-6">
+                <h3 class="">Monstercat Merch</h3>
+            </div>
+            <div class="col-xs-6 text right">
+                <a click-action="Click Merch View All" href="https://shop.monstercat.com" class="button button--black button--icon button--transparent">
+                    View all
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </header>
+        <ul class="art-list art-list--full-width">
+        {{#products}}
+            <li>
+                <a class="silent" click-action="Click Merch Product" click-label="Product: {{title}}" click-category="Release Page" href="https://shop.monstercat.com/products/{{handle}}" target="_BLANK" title="{{title}}">
+                    <div class="image-wrapper">
+                        <img src="/img/artwork-merch.jpg" class="preload" />
+                        <img src="{{ images.0.src }}"/>
+                    </div>
+                    <label class="title one-line-ellipsis">{{title}}</label>
+                </a>
+            </li>
+        {{/products}}
+        </ul>
+    </div>
+    {{/data}}
+</div>
 </script>
 

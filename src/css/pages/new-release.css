@@ -49,6 +49,7 @@
   position: relative;
   display: block;
   margin: 0 auto 5px;
+  overflow: visible;
 }
 
 .release-art-play img {
@@ -59,26 +60,43 @@
   position: absolute;
 }
 
-.release-art-play .icon {
-  width: 160px;
-  height: 160px;
+.release-art-play:hover .button {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.release-art-play .button {
+  width: 120px;
+  height: 120px;
   top: 50%;
-  margin-top: -80px;
-  margin-left: -80px;
+  margin-top: -60px;
+  margin-left: -60px;
   left: 50%;
   border-radius: 50%;
   background: #000;
   color: #fff;
   font-size: 64px;
   text-align: center;
-  line-height: 160px;
+  line-height: 120px;
   text-align: center;
   opacity: 0.75;
   position: absolute;
+  background: rgba(0,0,0,0.5);
+  border: 5px solid #fff;
 }
 
-.release-art-play .icon .fa {
-  margin-right: -15px;
+.release-art-play .button:hover {
+  background: #fff;
+  border-color: #fff;
+  color: dodgerblue;
+}
+
+.release-art-play .button .fa.fa-play {
+  margin-right: -10px;
+}
+
+.release-art-play .button .fa.fa-pause {
+  font-size: 58px;
 }
 
 .release-links {
@@ -117,19 +135,46 @@
   margin-top: -12px;
 }
 
-.release-artist {
-  margin-bottom: 5px;
+.release-artists {
+  display: block;
+}
+
+.release-artists.num-artists-2 {
   display: flex;
+  flex-direction: row;
+}
+
+.release-artists.num-artists-2 .release-artist {
+  width: 50%;
+}
+
+.release-artists.num-artists-2 .release-artist:nth-child(2n) {
+  margin-left: 5px;
+}
+
+.release-artist {
   background: #fff;
   padding: 1em;
+  margin-bottom: 5px;
+}
+
+.num-artists-1 .release-artist {
+  background: #fff;
+  padding: 1em;
+  width: 100%;
 }
 
 .release-artist .artist-image {
-  flex: 0 0 230px;
-  height: 145px;
+  height: auto;
+  display: block;
   background: center center no-repeat;
   background-size: cover;
-  margin-right: 10px;
+  margin-bottom: 0.25em;
+  transition: all 0.25s ease;
+}
+
+.release-artist .artist-image:hover {
+  background-position: bottom center;
 }
 
 .release-artist .artist-info {
@@ -164,6 +209,10 @@
   transition-duration: 0s;
 }
 
+.release-artist .socials a i {
+  margin-right: 3px;
+}
+
 .release-artist .socials a:hover {
   color: #fff;
   background: dodgerblue;
@@ -182,10 +231,28 @@
 }
 
 .release-cols .col-1 {
-  flex: 0 0 350px;
-  margin-left: 5px;
+  flex: 0 0 30%;
+  margin-right: 5px;
 }
 
 .release-cols .col-2 {
   width: 100%;
+}
+
+.release-merch {
+  margin-bottom: 5px;
+  background: #fff;
+  padding-top: 1em;
+}
+
+.release-merch a.button {
+  padding: 0.25em;
+}
+
+.release-merch .art-list--full-width.art-list li {
+  width: 25%;
+}
+.release-merch .art-list--full-width.art-list li:nth-child(5),
+.release-merch .art-list--full-width.art-list li:nth-child(6) {
+  display: none;
 }

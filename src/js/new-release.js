@@ -2,37 +2,42 @@ var RELEASE_LINK_MAP = {
   spotify: {
     label: 'Listen on Spotify',
     icon: 'spotify',
-    cta: 'Play'
+    cta: 'Play',
+    priority: 100
   },
   itunes: {
     cta: 'Download',
     label: 'iTunes',
-    icon: 'apple'
-  },
-  googleplay: {
-    cta: 'Download',
-    label: 'Google Play',
-    icon: 'google'
+    icon: 'apple',
+    priority: 90
   },
   applemusic: {
     cta: 'Play',
     icon: 'apple',
-    label: 'Apple Music'
+    label: 'Apple Music',
+    priority: 80
+  },
+  googleplay: {
+    cta: 'Download',
+    label: 'Google Play',
+    icon: 'google',
+    priority: 70
   },
   bandcamp: {
     cta: 'Go To',
     label: 'Bandcamp',
-    icon: 'bandcamp'
+    icon: 'bandcamp',
+    priority: 60
+  },
+  soundcloud: {
+    cta: 'Listen',
+    label: 'SoundCloud',
+    icon: 'soundcloud'
   },
   youtube: {
     cta: 'Watch',
     label: 'Watch on YouTube',
     icon: 'youtube'
-  },
-  soundcloud: {
-    cta: 'Listen',
-    label: 'Listen on SoundCloud',
-    icon: 'soundcloud'
   }
 }
 
@@ -52,10 +57,12 @@ function getTracksArtists (tracks) {
 }
 
 function transformReleasePage (obj, done) {
+  console.log('obj',obj);
   var scope = {}
   scope.release = mapRelease(obj);
   requestJSON({
-    url: endpoint + '/catalog/browse/?albumId=' + scope.release._id
+    url: endpoint + '/catalog/browse/?albumId=' + scope.release._id,
+    withCredentials: true
   }, function (err, result) {
     if(err) {
       return done(err);
