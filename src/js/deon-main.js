@@ -1326,11 +1326,11 @@ function joinDiscord (e, el) {
   el.disabled = true
   el.classList.add("on")
   requestJSON({
-    method:"POST", 
-    url: endpoint + "/self/discord/join", 
-    withCredentials: true, 
+    method:"POST",
+    url: endpoint + "/self/discord/join",
+    withCredentials: true,
     data: data
-  }, function (err, body, xhr) { 
+  }, function (err, body, xhr) {
     el.disabled = false;
     el.classList.remove("on");
     var invites = body.invites;
@@ -1340,7 +1340,7 @@ function joinDiscord (e, el) {
     }
     render(container, template.textContent, {
       error: err,
-      data: body 
+      data: body
     })
   });
 }

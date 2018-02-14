@@ -51,7 +51,7 @@ function pickBackground(){
 }
 
 function completedLicensing () {
-  pickBackground() 
+  pickBackground()
 }
 
 function completedContentCreatorLicensing () {
@@ -134,8 +134,8 @@ function submitLicensingOtherPlatforms (e) {
     data.userId = session.user._id
   }
   requestWithFormData({
-    url: 'https://submit.monstercat.com', 
-    method: 'POST', 
+    url: 'https://submit.monstercat.com',
+    method: 'POST',
     data: data
   }, function (err, obj, xhr) {
     if (err) return toasty(Error(err.message))

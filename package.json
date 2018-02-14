@@ -13,7 +13,11 @@
     "url": "https://github.com/monstercat/deon.git"
   },
   "author": "tmathews",
-  "contributors": ["lostlevels", "Vindexus", "juanferreras"],
+  "contributors": [
+    "lostlevels",
+    "Vindexus",
+    "juanferreras"
+  ],
   "license": "ISC",
   "dependencies": {
     "web-build": "git+https://github.com/monstercat/web-build.git"

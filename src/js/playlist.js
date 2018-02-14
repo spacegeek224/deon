@@ -406,3 +406,117 @@ function playlistDrop (e) {
   resetPlaylistInputs()
   savePlaylistOrder()
 }
+
+function openPlaylistSelect (e, el) {
+  var parentElement = el.parentElement;
+
+  var playlistsElement = parentElement.children[0].children[1];
+
+  var playlists = [];
+
+  for (var i = 0; i < playlistsElement.children.length; i++) {
+    var item = playlistsElement.children[i];
+
+    var name = item.attributes.getNamedItem("playlist-name").value;
+    var id = item.attributes.getNamedItem("playlist-id").value;
+
+    playlists.push({name: name, id: id});
+  }
+
+
+  openModal('add-playlist-modal', {
+    trackId: parentElement.getAttribute('track-id'),
+    releaseId: parentElement.getAttribute('release-id'),
+    playlists: playlists
+  })
+}
+
+function addToExistingPlaylist(e, el) {
+
+  var modal =   el.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+  var id =  el.parentElement.parentElement.getAttribute("playlist-id");
+  if (!id) return
+  var url   = endpoint + '/playlist/' + id;
+  var index = 0;
+  var i = el.children[0].classList;
+  var item  = {
+    trackId: modal.getAttribute("track-id"),
+    releaseId: modal.getAttribute("release-id")
+  }
+
+  if (!item.releaseId || !item.trackId) return window.alert(strings.error);
+
+  loadCache(url, function (err, obj) {
+    if (err) return window.alert(err.message)
+    var tracks = obj.tracks
+    if (isNaN(index)) index = tracks.length
+    tracks.splice(index, 0, item)
+
+    i.remove("fa-plus");
+    i.add("fa-spin");
+    i.add("fa-refresh");
+    update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
+
+      el.disabled = false
+      el.selectedIndex = 0
+      if (err) return toasty(err)
+      cache(url, obj)
+      updatePlayerPlaylist(id, tracks)
+      toasty(strings.addedToPlaylist)
+      i.add("fa-plus");
+      i.remove("fa-spin");
+      i.remove("fa-refresh");
+    })
+  })
+}
+
+function createAndAddToPlaylist(e, el) {
+  var parentElement = el.parentElement;
+  var playlistName = parentElement.children[0].value;
+
+  if (parentElement.children[0].value == "") {
+    toasty(new Error("You must provide a playlist name!"));
+    return;
+  }
+
+  el.innerHTML = "Working...";
+
+  var modal = el.parentElement.parentElement.parentElement.parentElement;
+  create('playlist', {
+    name: playlistName,
+    public: session.settings ? session.settings.playlistPublicByDefault : false
+  }, function(a, b, c) {
+    simpleUpdate(a,b,c);
+
+    var id = b._id;
+    if (!id) return
+    var url   = endpoint + '/playlist/' + id;
+    var index = 0;
+    var item  = {
+      trackId: modal.getAttribute("track-id"),
+      releaseId: modal.getAttribute("release-id")
+    }
+
+    if (!item.releaseId || !item.trackId) return window.alert(strings.error);
+
+    loadCache(url, function (err, obj) {
+      if (err) return window.alert(err.message)
+      var tracks = obj.tracks
+      if (isNaN(index)) index = tracks.length
+      tracks.splice(index, 0, item)
+
+      update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
+
+        el.disabled = false
+        el.selectedIndex = 0
+        if (err) return toasty(err)
+        cache(url, obj)
+        updatePlayerPlaylist(id, tracks)
+        toasty(strings.addedToPlaylist);
+        el.innerHTML = "Add to Playlist";
+      })
+    })
+  });
+
+
+};

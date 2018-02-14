@@ -92,3 +92,36 @@
         </div>
     </div>
 </script>
+
+<script type="text/template"
+        template-name="add-playlist-modal">
+    <div class="modal" release-id="{{releaseId}}" track-id="{{trackId}}">
+        <div class="panel panel--padded pointer-events">
+          <h1>Add to Playlist</h1>
+          <div class="modal-content">
+              <form style="display: flex;">
+                <input style="flex-grow: 1;" type="text" placeholder="Playlist Name"></input>
+                <button type="button" action="createAndAddToPlaylist">Add to New Playlist</button>
+              </form>
+              <table>
+                <tbody>
+                  {{#playlists}}
+                  <tr playlist-id="{{id}}" playlist-name="{{name}}">
+                    <td>{{name}}</td>
+                    <td>
+                      <a class="silent button-mobile" action="addToExistingPlaylist">
+                        <i class="fa fa-plus"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {{/playlists}}
+
+                </tbody>
+              </table>
+          </div>
+          <button class="button--close faux" action="closeModal">
+            <i class="fa fa-remove"></i>
+          </button>
+        </div>
+    </div>
+</script>

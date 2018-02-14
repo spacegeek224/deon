@@ -6,10 +6,16 @@
     {{#error}}
     {{/error}}
     {{#data}}
-    <option value="" checked>Add to Playlist</option>
-    {{#results}}
-    <option value="{{_id}}">{{name}}</option>
-    {{/results}}
+    <a class="silent button--mobile" action="openPlaylistSelect">
+      <i class="fa fa-plus">
+      </i>
+      <div style="display: none;" class="data-playlists">
+        {{#results}}
+          <div class="data-playlist" playlist-id="{{_id}}" playlist-name="{{name}}"></div>
+        {{/results}}
+      </div>
+
+    </a>
     {{/data}}
 </script>
 
@@ -97,9 +103,9 @@
                         {{#public}}checked{{/public}} />
                     Public
                 </label>
-                <button action="reorderPlaylistFromInputs" 
+                <button action="reorderPlaylistFromInputs"
                         trigger="reorderPlaylistFromInputs">
-                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i>
                         Save Order</button>
                 {{/canPublic}}
                  <button class="faux button--mobile">

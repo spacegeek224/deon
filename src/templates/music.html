@@ -332,14 +332,14 @@
                     <td class="push-right">
                         {{>trackButtons}}
                         {{#canPlaylist}}
-                        <select
-                            onchange="addToPlaylist(null, this)"
+                        <div
                             source="$endpoint/playlist"
                             class="col-xs-hidden col-md-visible inline"
                             template="select-playlist"
                             release-id="{{releaseId}}"
                             track-id="{{_id}}">
-                        </select>
+
+                        </div>
                         {{/canPlaylist}}
                     </td>
                 </tr>
@@ -379,7 +379,7 @@
     {{#data}}
     <div class="bgbox">
         <div class="banner banner--scaled">
-            <div class="banner" 
+            <div class="banner"
               style="background-image: url('{{image}}');
               background-position: center {{imagePositionY}}%;"></div>
             <div class="banner-shade banner-shade--darker"></div>

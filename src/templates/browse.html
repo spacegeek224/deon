@@ -60,7 +60,7 @@
         <option value="">Genre</option>
         {{#genres}}
         <option value="{{name}}">{{name}}</option>
-        {{/genres}} 
+        {{/genres}}
       </select>
     </fieldset>
     <fieldset class="filter-group">
@@ -135,14 +135,14 @@
                     <td class="push-right">
                         {{>trackButtons}}
                         {{#canPlaylist}}
-                        <select
+                        <div
                             onchange="addToPlaylist(null, this)"
                             class="col-xs-hidden col-md-visible inline"
                             source="$endpoint/playlist"
                             template="select-playlist"
                             release-id="{{releaseId}}"
                             track-id="{{_id}}">
-                        </select>
+                        </div>
                         {{/canPlaylist}}
                     </td>
                 </tr>
