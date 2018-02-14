@@ -443,7 +443,9 @@ function addToExistingPlaylist(e, el) {
     trackId: modal.getAttribute("track-id"),
     releaseId: modal.getAttribute("release-id")
   }
-
+  i.remove("fa-plus");
+  i.add("fa-spin");
+  i.add("fa-refresh");
   if (!item.releaseId || !item.trackId) return window.alert(strings.error);
 
   loadCache(url, function (err, obj) {
@@ -452,9 +454,7 @@ function addToExistingPlaylist(e, el) {
     if (isNaN(index)) index = tracks.length
     tracks.splice(index, 0, item)
 
-    i.remove("fa-plus");
-    i.add("fa-spin");
-    i.add("fa-refresh");
+
     update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
 
       el.disabled = false
